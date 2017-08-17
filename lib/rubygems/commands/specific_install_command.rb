@@ -130,10 +130,8 @@ class Gem::Commands::SpecificInstallCommand < Gem::Command
   end
 
   def download( full_url, output_name )
-    File.open(output_name, "wb") do |output_file|
-      uri = URI.parse(full_url)
-      output_file.write(uri.read)
-    end
+    require 'open-uri'
+    File.binwrite output_name, URI.parse(full_url).read
   end
 
   def install_from_git(dir)
