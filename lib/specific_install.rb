@@ -1,4 +1,4 @@
 module SpecificInstall
-  autoload :SpecificInstallCommand,  'specific_install/specific_install_command'
-  autoload :Version,         'specific_install/version'
+  require_relative 'specific_install/specific_install_command'
+  require_relative 'specific_install/version'
 end
