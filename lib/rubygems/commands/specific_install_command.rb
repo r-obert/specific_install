@@ -1,8 +1,5 @@
 require 'rubygems/command_manager'
 require 'rubygems/dependency_installer'
-require 'tempfile'
-require 'fileutils'
-require 'open-uri'
 
 class Gem::Commands::SpecificInstallCommand < Gem::Command
   require_relative '../../specific_install/git'
@@ -51,6 +48,7 @@ class Gem::Commands::SpecificInstallCommand < Gem::Command
     if @loc.nil?
       raise ArgumentError, "No location received. Use like `gem specific_install -l http://example.com/rdp/specific_install`"
     end
+    require 'tempfile'
     Dir.mktmpdir do |dir|
       if subdir = options[:directory]
         abort("Subdir '#{subdir}' is not a valid directory") unless valid_subdir?(subdir)
