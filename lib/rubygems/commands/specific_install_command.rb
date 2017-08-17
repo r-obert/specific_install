@@ -5,6 +5,8 @@ require 'fileutils'
 require 'open-uri'
 
 class Gem::Commands::SpecificInstallCommand < Gem::Command
+  require_relative '../../specific_install/git'
+  include SpecificInstall::Git
   attr_accessor :output
 
   def description
@@ -63,29 +65,18 @@ class Gem::Commands::SpecificInstallCommand < Gem::Command
 
   private
 
-  def git(*commands)
-    system "git", *commands
-    raise "'$ git #{commands.join(' ')}' exited with an error" if $?.exitstatus != 0
-  end
-
-  def break_unless_git_present
-    unless system("which git") || system("where git")
-      abort("Please install git before using a git based link for specific_install")
-    end
-  end
-
   def determine_source_and_install
     case @loc
     when /^https?(.*)\.gem$/
       install_gem
     when /\.git$/
-      break_unless_git_present
+      git_required!
       install_git
     when /^https?(.*)$/
-      break_unless_git_present
+      git_required!
       install_http_repo
     when %r(.*/.*)
-      break_unless_git_present
+      git_required!
       install_shorthand
     else
       warn 'Error: must end with .git to be a git repository' +
